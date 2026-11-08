@@ -10,7 +10,7 @@ Please include what you found, how to reproduce it, and what an attacker could d
 
 ## Status
 
-The code hasn't had an independent security review yet. Until it has, use small amounts.
+The code hasn't had an independent security review yet. Until it has, use small amounts. Reviewers: start with [docs/security-review.md](docs/security-review.md).
 
 ## What to look at
 

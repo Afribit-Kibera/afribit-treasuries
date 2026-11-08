@@ -77,6 +77,7 @@ Without PostgreSQL settings, the database permission and concurrency tests are s
 
 ## Documents
 
+- [Security review guide](docs/security-review.md)
 - [Clan wallet API](docs/clan-wallet-api.md) and [the plan behind it](docs/multisig-treasury-plan-2026-11-04.md)
 - [Recovering a clan's money](docs/clan-wallet-recovery.md)
 - [Mainnet](docs/mainnet.md)
