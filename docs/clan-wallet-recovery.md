@@ -62,7 +62,7 @@ The tool rebuilds the wallet from the keys in the file and refuses a file that d
 python -m clans.recover coins backup.json
 ```
 
-The tool lists each coin, its confirmations, and either "recovery ready" or how many days are left. It reads a public block explorer (mempool.space by default; `--esplora <url>` to use another).
+The tool lists each coin, its confirmations, and either "recovery ready" or how many days are left. It reads a public block explorer (mempool.space, then blockstream.info, by default; `--esplora url1,url2` to use others, such as your own node).
 
 It always checks all of the first 1,000 change addresses, because Clans never sends change, refreshes or moves anywhere else, so this takes a minute or two. In another wallet app, such as Sparrow, set the gap limit to 1000 to see the same coins.
 

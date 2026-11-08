@@ -36,6 +36,7 @@ from clans.clan_wallet import (
     bdk_fee_rate,
     network_kind,
 )
+from clans.explorers import explorer_urls
 
 BACKUP_FORMAT = "afribit-clan-wallet-backup/1"
 SWEEP_FORMAT = "afribit-clan-recovery-sweep/1"
@@ -343,14 +344,31 @@ def finish_sweep(policy: ClanPolicy, sweep: dict, signed: list[dict], **limits) 
 # Command line ----------------------------------------------------------------------------
 
 
-def _explorer(policy: ClanPolicy, url: str | None) -> str:
-    return (url or f"https://mempool.space/{policy.network}/api").rstrip("/")
+def _explorers(policy: ClanPolicy, urls: str | None) -> list[str]:
+    try:
+        return explorer_urls(policy.network, urls or "")
+    except ValueError as exc:
+        raise RecoveryError(str(exc)) from None
 
 
-def _synced(policy: ClanPolicy, url: str, stop_gap: int) -> tuple[ClanWallet, int]:
-    wallet = ClanWallet(policy)
-    wallet.sync(url, stop_gap=stop_gap, all_change=True)
-    return wallet, bdk.EsploraClient(url).get_height()
+def _try_each(urls: list[str], read):
+    """Tries each explorer in turn until one answers."""
+    for url in urls:
+        try:
+            return read(url)
+        except bdk.EsploraError as exc:
+            if url == urls[-1]:
+                raise RecoveryError(f"No block explorer answered: {exc}") from None
+            print(f"{url} didn't answer; trying the next explorer.", file=sys.stderr)
+
+
+def _synced(policy: ClanPolicy, urls: list[str], stop_gap: int) -> tuple[ClanWallet, int]:
+    def read(url):
+        wallet = ClanWallet(policy)
+        wallet.sync(url, stop_gap=stop_gap, all_change=True)
+        return wallet, bdk.EsploraClient(url).get_height()
+
+    return _try_each(urls, read)
 
 
 def _read(path: str) -> dict:
@@ -380,7 +398,9 @@ def main(argv: list[str] | None = None) -> int:
             name, help="List coins and their wait" if name == "coins" else "Build a sweep"
         )
         command.add_argument("backup")
-        command.add_argument("--esplora", help="Block explorer API (default: mempool.space)")
+        command.add_argument(
+            "--esplora", help="Block explorer APIs, comma separated (default: public ones)"
+        )
         command.add_argument("--stop-gap", type=int, default=DEFAULT_STOP_GAP)
     build = commands.choices["build"]
     build.add_argument("--to", required=True, help="The address everyone agreed on")
@@ -414,8 +434,8 @@ def main(argv: list[str] | None = None) -> int:
         elif args.command == "core":
             print(json.dumps(core_import(policy), indent=2))
         elif args.command in {"coins", "build"}:
-            url = _explorer(policy, args.esplora)
-            wallet, tip = _synced(policy, url, args.stop_gap)
+            urls = _explorers(policy, args.esplora)
+            wallet, tip = _synced(policy, urls, args.stop_gap)
             found = coins(policy, wallet, tip)
             if args.command == "coins":
                 for coin in found:
@@ -462,8 +482,12 @@ def main(argv: list[str] | None = None) -> int:
             raw = finish_sweep(policy, sweep, signed, max_fee_sats=args.max_fee)
             txid = str(bdk.Transaction(bytes.fromhex(raw)).compute_txid())
             if args.broadcast:
-                client = bdk.EsploraClient(_explorer(policy, args.esplora))
-                client.broadcast(bdk.Transaction(bytes.fromhex(raw)))
+                _try_each(
+                    _explorers(policy, args.esplora),
+                    lambda url: bdk.EsploraClient(url).broadcast(
+                        bdk.Transaction(bytes.fromhex(raw))
+                    ),
+                )
                 print(f"Sent: {txid}")
             else:
                 print(raw)

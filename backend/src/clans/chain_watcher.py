@@ -1,7 +1,9 @@
 """Chain watcher for clan wallets: the only process that credits money, builds payouts and
 broadcasts them. It holds no key that can spend. Run it with `python -m clans.chain_watcher`.
 
-Each cycle, for every active clan wallet, it:
+Each cycle it reads the chain tip. A wallet is then read in full when there's a new block,
+something changed for it in the database (an address, a payout request, a signature), or it
+hasn't been read for `clan_wallet_idle_read_seconds`. For each wallet it reads, it:
 
 1. reads the wallet from a block explorer;
 2. records payments to clan addresses, and credits them once they have 3 confirmations;
@@ -24,6 +26,8 @@ import argparse
 import json
 import math
 import time
+import urllib.request
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
 from decimal import Decimal
@@ -59,6 +63,7 @@ from clans.wallet_models import (
     WalletPayout,
     WalletPayoutRequest,
     WalletReceipt,
+    WalletSignature,
 )
 from clans.wallet_payments import (
     REORG_DEPTH,
@@ -117,14 +122,28 @@ def payout_rate(payout: WalletPayout) -> float:
     return float(payout.fee_rate_sat_vb)
 
 
+# BDK's client has no timeout: an explorer that doesn't answer holds it for minutes. The tip
+# is read first each cycle, here, so a dead explorer is passed over within this time.
+TIP_TIMEOUT_SECONDS = 15
+TIP_READS = ThreadPoolExecutor(max_workers=4, thread_name_prefix="tip")
+
+
 class EsploraChain:
     """A public or self-hosted Esplora explorer. Read-only apart from broadcasting."""
 
     def __init__(self, url: str):
+        self.url = url
         self.client = bdk.EsploraClient(url)
 
     def tip_height(self) -> int:
-        return self.client.get_height()
+        return TIP_READS.submit(self.read_tip).result(timeout=TIP_TIMEOUT_SECONDS)
+
+    def read_tip(self) -> int:
+        request = urllib.request.Request(
+            f"{self.url}/blocks/tip/height", headers={"User-Agent": "afribit-treasuries"}
+        )
+        with urllib.request.urlopen(request, timeout=TIP_TIMEOUT_SECONDS) as response:
+            return int(response.read(20))
 
     def fee_rate(self) -> float:
         """The rate to confirm within about an hour, in sat/vB to a thousandth."""
@@ -154,6 +173,50 @@ class EsploraChain:
         self.client.broadcast(bdk.Transaction(bytes.fromhex(raw_hex)))
 
 
+class FailoverChain:
+    """Several explorers in order. Stays on the one that last answered and moves on when it
+    fails. Goes back to the first (usually your own node) after a while."""
+
+    RETRY_FIRST_SECONDS = 600
+
+    def __init__(self, chains: list[Chain]):
+        self.chains = chains
+        self.current = 0
+        self.moved_at = 0.0
+
+    def call(self, name: str, *args):
+        if self.current and time.monotonic() - self.moved_at > self.RETRY_FIRST_SECONDS:
+            self.current = 0
+        error = None
+        for step in range(len(self.chains)):
+            index = (self.current + step) % len(self.chains)
+            try:
+                result = getattr(self.chains[index], name)(*args)
+            except Exception as exc:
+                error = exc
+                continue
+            if index != self.current:
+                print(f"Block explorer {index + 1} of {len(self.chains)} is answering.")
+                self.current, self.moved_at = index, time.monotonic()
+            return result
+        raise error
+
+    def tip_height(self) -> int:
+        return self.call("tip_height")
+
+    def fee_rate(self) -> float:
+        return self.call("fee_rate")
+
+    def sync(self, wallet: ClanWallet) -> None:
+        self.call("sync", wallet)
+
+    def state(self, txid: str) -> TxState:
+        return self.call("state", txid)
+
+    def broadcast(self, raw_hex: str) -> None:
+        self.call("broadcast", raw_hex)
+
+
 def outpoint(value: str) -> bdk.OutPoint:
     txid, vout = value.split(":")
     return bdk.OutPoint(txid=bdk.Txid.from_string(txid), vout=int(vout))
@@ -169,7 +232,7 @@ class ChainWatcher:
             raise RuntimeError("Clan wallets are switched off")
         self.settings = settings
         self.security = Security(settings)
-        self.chain = chain or EsploraChain(settings.esplora_url)
+        self.chain = chain or FailoverChain([EsploraChain(url) for url in settings.esplora_urls])
         self.wallets: dict[str, ClanWallet] = {}
         # Wallet id -> error type from the last cycle. One clan's problem never stops others.
         self.failures: dict[str, str] = {}
@@ -178,43 +241,96 @@ class ChainWatcher:
         # The public KES rate, as the app shows it. Read only while a KES debt is open.
         self.rates = DisplayRates()
         self.kes_rate: kes_debts.Rate | None = None
+        # Wallet id -> (tip, monotonic time, database marks) at its last good read.
+        self.last_read: dict[str, tuple[int, float, tuple]] = {}
 
     # One cycle ----------------------------------------------------------------------------
 
     def tick(self):
-        tip, rate = self.chain.tip_height(), self.chain.fee_rate()
+        tip = self.chain.tip_height()
         self.tip = tip
+        network = self.settings.clan_wallet_network
         with self.security.db() as db:
-            status = db.get(ChainStatus, self.settings.clan_wallet_network)
-            if not status:
-                status = ChainStatus(network=self.settings.clan_wallet_network)
-                db.add(status)
-            status.tip_height = tip
-            status.fee_rate_sat_vb = math.ceil(rate)
-            status.fee_rate_sat_kwu = fee_rate_kwu(rate)
-            status.observed_at, status.message = now_iso(), ""
+            ids = db.scalars(
+                select(ClanWalletRecord.id).where(
+                    ClanWalletRecord.status.in_(["active", "retired"]),
+                    ClanWalletRecord.activated_at.is_not(None),
+                    ClanWalletRecord.network == network,
+                )
+            ).all()
+            marks = self.marks(db, ids)
+            has_rate = db.get(ChainStatus, network) is not None
             kes_owed = db.scalar(
                 select(Grant.id)
                 .where(Grant.obligation_currency == kes_debts.KES, Grant.status == "in_recovery")
                 .limit(1)
             )
-            ids = db.scalars(
-                select(ClanWalletRecord.id).where(
-                    ClanWalletRecord.status.in_(["active", "retired"]),
-                    ClanWalletRecord.activated_at.is_not(None),
-                    ClanWalletRecord.network == self.settings.clan_wallet_network,
-                )
-            ).all()
+        now = time.monotonic()
+        due = [wallet_id for wallet_id in ids if self.due(wallet_id, tip, marks[wallet_id], now)]
+        # The fee estimate is read only when some wallet is read; otherwise the last one stays.
+        rate = self.chain.fee_rate() if due or not has_rate else None
+        with self.security.db() as db:
+            status = db.get(ChainStatus, network)
+            if not status:
+                status = ChainStatus(network=network)
+                db.add(status)
+            status.tip_height = tip
+            if rate is not None:
+                status.fee_rate_sat_vb = math.ceil(rate)
+                status.fee_rate_sat_kwu = fee_rate_kwu(rate)
+            status.observed_at, status.message = now_iso(), ""
         # Read outside any transaction, so a slow rate source holds up no clan.
-        self.kes_rate = self.fetch_kes_rate() if kes_owed else None
+        self.kes_rate = self.fetch_kes_rate() if kes_owed and due else None
         self.failures = {}
-        self.watched = len(ids)
-        for wallet_id in ids:
+        self.watched = len(due)
+        for wallet_id in due:
             try:
                 self.watch(wallet_id, tip, rate)
             except Exception as exc:
                 self.failures[wallet_id] = type(exc).__name__
                 print(f"Clan wallet {wallet_id} skipped this cycle: {type(exc).__name__}")
+            else:
+                # Marks from before the read: anything added during it gets its own read.
+                self.last_read[wallet_id] = (tip, now, marks[wallet_id])
+
+    def due(self, wallet_id: str, tip: int, marks: tuple, now: float) -> bool:
+        last = self.last_read.get(wallet_id)
+        if last is None:
+            return True
+        read_tip, read_at, read_marks = last
+        return (
+            tip != read_tip
+            or marks != read_marks
+            or now - read_at >= self.settings.clan_wallet_idle_read_seconds
+        )
+
+    def marks(self, db, ids) -> dict[str, tuple]:
+        """What clans change between blocks, per wallet: addresses, requests and signatures.
+        Payout rows count too, so a payout the watcher just built is checked next cycle."""
+        found = {wallet_id: [] for wallet_id in ids}
+        if not ids:
+            return {}
+        queries = [
+            select(
+                WalletAddress.wallet_id, func.count(), func.max(WalletAddress.created_at)
+            ).group_by(WalletAddress.wallet_id),
+            select(
+                WalletPayoutRequest.wallet_id,
+                func.count(),
+                func.max(WalletPayoutRequest.updated_at),
+            ).group_by(WalletPayoutRequest.wallet_id),
+            select(
+                WalletPayout.wallet_id, func.count(), func.max(WalletPayout.updated_at)
+            ).group_by(WalletPayout.wallet_id),
+            select(WalletPayout.wallet_id, func.count(), func.max(WalletSignature.created_at))
+            .join(WalletSignature, WalletSignature.payout_id == WalletPayout.id)
+            .group_by(WalletPayout.wallet_id),
+        ]
+        for query in queries:
+            rows = {row[0]: tuple(row[1:]) for row in db.execute(query)}
+            for wallet_id, values in found.items():
+                values.append(rows.get(wallet_id))
+        return {wallet_id: tuple(values) for wallet_id, values in found.items()}
 
     def fetch_kes_rate(self) -> kes_debts.Rate | None:
         try:

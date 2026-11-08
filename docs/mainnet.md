@@ -11,7 +11,7 @@ trial on 6 Nov 2026 showed.
 CLANS_CLAN_WALLET_NETWORK=bitcoin         # the default; signet or testnet4 to try it out
 CLANS_CLAN_WALLET_OVERSIGHT_KEYS=[fingerprint/87'/0'/0']xpub...
 CLANS_CLAN_WALLET_CONFIRMATIONS=3         # deposits count after this many blocks
-CLANS_CLAN_WALLET_ESPLORA_URL=            # optional; mempool.space by default
+CLANS_CLAN_WALLET_ESPLORA_URL=            # optional; see Block explorers below
 ```
 
 - **Keys.** Mainnet keys use account path `87'/0'/0'` and are written as `xpub`. Test-network
@@ -25,6 +25,30 @@ CLANS_CLAN_WALLET_ESPLORA_URL=            # optional; mempool.space by default
 - **Addresses.** Clan addresses start with `bc1p`. Payout addresses must start with `bc1q` or
   `bc1p`. The laptop asks for the characters after `bc1q` (or `bc1p`), so the beginning every
   address shares isn't read back.
+
+## Block explorers
+
+The chain watcher reads the chain from Esplora APIs. List them in
+`CLANS_CLAN_WALLET_ESPLORA_URL`, comma separated. It uses the first that answers, moves to the
+next when one fails, and tries the first again after 10 minutes. Left empty, it uses
+mempool.space and then blockstream.info for the network.
+
+Any Esplora API works:
+
+- **Your own node.** electrs, or the mempool app on an Umbrel or Start9
+  (`http://umbrel.local:3006/api`). Put it first. No rate limits, and nobody else sees which
+  addresses are the clans'. If the server isn't on the same network, reach it over a VPN such as
+  Tailscale rather than opening a port.
+- **Public ones.** `https://mempool.space/api`, `https://blockstream.info/api`, or another public
+  mempool instance such as `https://mempool.emzy.de/api`. They rate-limit, and they see the
+  clans' addresses.
+
+Each cycle (every 30 seconds) reads only the chain tip. A wallet is read in full when a new
+block arrives, when something changes for it (a new address, a payout request, a signature), or
+every `CLANS_CLAN_WALLET_IDLE_READ_SECONDS` (5 minutes by default). So a payment with no block
+yet shows within 5 minutes. A fully signed payout is sent on the next cycle.
+
+The recovery tool takes the same kind of list: `--esplora url1,url2`.
 
 ## Real-sats trial, 6 Nov 2026
 
@@ -63,8 +87,8 @@ TRIAL_RETURN_ADDRESS=bc1q... python scripts/mainnet_trial.py grant return | sign
 3. **Public block explorers rate-limit the chain watcher.**
    - **The load.** Each 30-second cycle makes about 10 requests per clan wallet: the tip, fee estimates, each used address and each transaction. That's about 1,200 an hour for one clan.
    - **What happened.** Blockstream allows 700 an hour without an API key, and refused the trial's watcher after a few hours. mempool.space has similar public limits.
-   - **The fix in code.** The watcher now waits longer after each failed cycle, up to 10 minutes, instead of retrying every 30 seconds.
-   - **For production.** Production mainnet needs its own Esplora or electrs server (or a paid API key) in `CLANS_CLAN_WALLET_ESPLORA_URL`. It's a launch requirement.
+   - **The fix in code.** The watcher waits longer after each failed cycle, up to 10 minutes. It now reads a quiet wallet only on a new block or every 5 minutes, and moves to another explorer when one refuses ([Block explorers](#block-explorers)).
+   - **For production.** Use your own Esplora node first in `CLANS_CLAN_WALLET_ESPLORA_URL`, with public ones after it.
 
 ### Smaller findings
 

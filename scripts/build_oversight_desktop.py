@@ -33,7 +33,7 @@ PYTHON_URL = (
 # release manager (thomas@python.org, issuer accounts.google.com).
 PYTHON_SHA256 = "9e35319bffedab8b36ad44d8f377cb4f1733bcec257a0b6d04d94f01486ddb38"
 # The oversight core and what it imports. Nothing from the server side.
-CORE = ["__init__.py", "clan_wallet.py", "oversight.py", "oversight_guide.py",
+CORE = ["__init__.py", "clan_wallet.py", "explorers.py", "oversight.py", "oversight_guide.py",
         "oversight_service.py", "recover.py"]  # fmt: skip
 
 

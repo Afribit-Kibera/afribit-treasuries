@@ -265,7 +265,7 @@ Nothing in Phase 0 is wired into the live app or touches mainnet.
   - The web app never credits money, builds payouts or broadcasts.
 - **Chain watcher** (`python -m clans.chain_watcher`, one instance at a time):
   - Runs as [afribit-clans-chain-watcher.service](../ops/afribit-clans-chain-watcher.service) under its own account, `afribit-clans-chain`. Its settings are in `/etc/afribit-clans/chain-watcher.env`: the worker database role, with no BTCPay credentials. Provisioning that account and file is still a manual step.
-  - Reads the block explorer every 30 seconds. Settings: `CLANS_CLAN_WALLET_ESPLORA_URL` (default `https://mempool.space/<network>/api`) and `CLANS_CLAN_WALLET_MAX_FEE_SATS` (default 2,000).
+  - Reads the chain tip every 30 seconds, and a wallet on a new block, on activity or every 5 minutes. Settings: `CLANS_CLAN_WALLET_ESPLORA_URL` (Esplora APIs tried in order, see [mainnet.md](mainnet.md#block-explorers)) and `CLANS_CLAN_WALLET_MAX_FEE_SATS` (default 2,000).
   - Credits a deposit or repayment once it has 3 confirmations, only at an address it derives itself from the wallet.
   - Builds payout drafts from coins with 3 confirmations. A changed beneficiary address gets a new draft that spends the same coins, so both versions can never be paid.
   - Checks every signature with BDK before broadcasting, and drops any that fail.

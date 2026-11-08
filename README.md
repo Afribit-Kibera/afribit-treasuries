@@ -60,7 +60,7 @@ To try clan wallets end to end with a simulated Bitcoin network, see [docs/walle
 
 1. **Oversight laptops first.** Set up 1 to 3 laptops with Afribit Oversight ([docs/oversight-laptop-setup.md](docs/oversight-laptop-setup.md)) and note their public keys.
 2. **The server.** PostgreSQL, HTTPS, and the settings in [backend/.env.example](backend/.env.example). Set `CLANS_CLAN_WALLETS_ENABLED=true` and the oversight keys. The network is Bitcoin mainnet unless you set `CLANS_CLAN_WALLET_NETWORK=signet`. The server refuses to start if a key doesn't match the network.
-3. **Your own block explorer.** On mainnet, run your own Esplora or electrs server and set `CLANS_CLAN_WALLET_ESPLORA_URL`. Public explorers rate-limit the chain watcher ([docs/mainnet.md](docs/mainnet.md)).
+3. **Block explorers.** The chain watcher uses mempool.space and blockstream.info unless you list others in `CLANS_CLAN_WALLET_ESPLORA_URL`. Put your own Esplora node first (electrs, or the mempool app on an Umbrel): public explorers rate-limit ([docs/mainnet.md](docs/mainnet.md#block-explorers)).
 4. **The oversight app.** Build it with your server's address: set `OVERSIGHT_CLANS_URL` when building, or run the `oversight-desktop` workflow with `clans_url`.
 
 Keep provider credentials, backup words, wallet backups and database dumps out of Git.

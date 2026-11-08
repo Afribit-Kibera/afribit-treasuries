@@ -7,6 +7,8 @@ from urllib.parse import urlparse
 from pydantic import Field, SecretStr, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+from clans.explorers import explorer_urls
+
 
 class LiveSettings(BaseSettings):
     model_config = SettingsConfigDict(
@@ -54,8 +56,11 @@ class LiveSettings(BaseSettings):
     clan_wallet_confirmations: int = Field(default=3, ge=1, le=12)
     clan_wallet_oversight_keys: str = ""
     clan_wallet_recovery_blocks: int = Field(default=26_280, ge=4_320, le=65_535)
-    # Read by the chain watcher only. Empty means the public explorer for the network.
+    # Esplora APIs for the chain watcher, comma separated, tried in order. Empty: the public
+    # ones for the network (clans.explorers). Put your own node first.
     clan_wallet_esplora_url: str = ""
+    # A wallet with no new block and nothing new from its clan is read this often.
+    clan_wallet_idle_read_seconds: int = Field(default=300, ge=30, le=3_600)
     # The most network fee one payout may carry. Oversight laptops apply their own limit too.
     clan_wallet_max_fee_sats: int = Field(default=2_000, ge=100, le=50_000)
     # The most network fee a refresh or a move to a new wallet may carry. These spend
@@ -79,12 +84,8 @@ class LiveSettings(BaseSettings):
         ]
 
     @property
-    def esplora_url(self) -> str:
-        if self.clan_wallet_esplora_url:
-            return self.clan_wallet_esplora_url.rstrip("/")
-        if self.clan_wallet_network == "bitcoin":
-            return "https://mempool.space/api"
-        return f"https://mempool.space/{self.clan_wallet_network}/api"
+    def esplora_urls(self) -> list[str]:
+        return explorer_urls(self.clan_wallet_network, self.clan_wallet_esplora_url)
 
     @property
     def oversight_keys(self) -> list[str]:
@@ -136,6 +137,8 @@ class LiveSettings(BaseSettings):
             raise ValueError("Receiving requires the dedicated store credential")
         if self.clan_wallets_enabled:
             from clans.clan_wallet import ClanWalletError, SignerKey
+
+            explorer_urls(self.clan_wallet_network, self.clan_wallet_esplora_url)
 
             try:
                 keys = [SignerKey.parse(key) for key in self.oversight_keys]

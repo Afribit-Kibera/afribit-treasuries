@@ -165,6 +165,8 @@ def clan(tmp_path, keys):
 
 
 def tick(clan):
+    """A cycle that reads every wallet, as after a new block. test_chain_reads covers the rest."""
+    clan["watcher"].last_read.clear()
     clan["watcher"].tick()
     assert clan["watcher"].failures == {}
 

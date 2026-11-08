@@ -11,6 +11,7 @@ on:
       - "oversight-desktop/**"
       - "backend/src/clans/__init__.py"
       - "backend/src/clans/clan_wallet.py"
+      - "backend/src/clans/explorers.py"
       - "backend/src/clans/oversight.py"
       - "backend/src/clans/oversight_guide.py"
       - "backend/src/clans/oversight_service.py"
@@ -73,6 +74,41 @@ jobs:
         run: |
           npm ci
           npm run build
+
+      - name: Cache the NSIS tools
+        id: nsis-cache
+        uses: actions/cache@v6
+        with:
+          path: ~\AppData\Local\tauri\NSIS
+          key: nsis-3.13-tauri-utils-0.5.3
+
+      # Tauri's download links often fail with 504; gh goes through the API instead.
+      - name: Fetch the NSIS tools
+        if: steps.nsis-cache.outputs.cache-hit != 'true'
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          function Fetch($repo, $tag, $file, $sha1) {
+            for ($try = 1; $try -le 5; $try++) {
+              gh release download $tag -R $repo -p $file -D $env:RUNNER_TEMP --clobber
+              if ($LASTEXITCODE -eq 0) { break }
+              Start-Sleep -Seconds (10 * $try)
+            }
+            $path = Join-Path $env:RUNNER_TEMP $file
+            if ((Get-FileHash $path -Algorithm SHA1).Hash -ne $sha1) { throw "Wrong hash: $file" }
+            $path
+          }
+          $tools = Join-Path $env:LOCALAPPDATA tauri
+          New-Item -ItemType Directory -Force $tools | Out-Null
+          $zip = Fetch tauri-apps/binary-releases nsis-3.13 nsis-3.13.zip DB14F8AF2EA346B786C6AE19343F61AAF5E09B8E
+          $dll = Fetch tauri-apps/nsis-tauri-utils nsis_tauri_utils-v0.5.3 nsis_tauri_utils.dll 75197FEE3C6A814FE035788D1C34EAD39349B860
+          Remove-Item -Recurse -Force "$tools/NSIS", "$tools/nsis-3.13" -ErrorAction SilentlyContinue
+          Expand-Archive $zip -DestinationPath $tools
+          Rename-Item "$tools/nsis-3.13" NSIS
+          $plugins = "$tools/NSIS/Plugins/x86-unicode/additional"
+          New-Item -ItemType Directory -Force $plugins | Out-Null
+          Copy-Item $dll "$plugins/nsis_tauri_utils.dll"
 
       - name: Build the installer
         working-directory: oversight-desktop

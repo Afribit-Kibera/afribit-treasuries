@@ -137,7 +137,7 @@ Audit events: `wallet_next_started`, `wallet_next_cancelled`, `wallet_retired`, 
 - The money routes need an **active** clan wallet. Before that, `GET` lists return `[]` and the other routes return `409` "The clan wallet isn't active yet."
 - With clan wallets switched off, routes that change anything return `503`.
 - Money is only credited, and payouts are only built and sent, by the **chain watcher**, a separate worker. The web app never does these.
-- Settings: `CLANS_CLAN_WALLET_ESPLORA_URL` (default `https://mempool.space/<network>/api`), `CLANS_CLAN_WALLET_MAX_FEE_SATS` (default 2,000, for grants) and `CLANS_CLAN_WALLET_MAX_SWEEP_FEE_SATS` (default 10,000, for refreshes and moves, which spend many coins).
+- Settings: `CLANS_CLAN_WALLET_ESPLORA_URL` (comma-separated Esplora APIs, tried in order; default mempool.space then blockstream.info), `CLANS_CLAN_WALLET_IDLE_READ_SECONDS` (default 300), `CLANS_CLAN_WALLET_MAX_FEE_SATS` (default 2,000, for grants) and `CLANS_CLAN_WALLET_MAX_SWEEP_FEE_SATS` (default 10,000, for refreshes and moves, which spend many coins).
 - Addresses are always in the **active** wallet. Receipts cover every generation, so a late payment to an old address still shows; the chain watcher moves it across.
 - Too many requests return `429` "Too many attempts. Please wait a few minutes."
 

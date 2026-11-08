@@ -77,7 +77,7 @@ def test_mainnet_is_the_default_network(monkeypatch):
     monkeypatch.setenv("CLANS_CLAN_WALLET_OVERSIGHT_KEYS", str(main_key(4).as_public()))
     settings = LiveSettings()
     assert settings.clan_wallet_network == "bitcoin"
-    assert settings.esplora_url == "https://mempool.space/api"
+    assert settings.esplora_urls == ["https://mempool.space/api", "https://blockstream.info/api"]
     monkeypatch.setenv(
         "CLANS_CLAN_WALLET_OVERSIGHT_KEYS", str(recover.account_key(words(4)).as_public())
     )
