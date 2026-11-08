@@ -1,0 +1,31 @@
+[Unit]
+Description=AfriBit Clans treasury reconciliation worker
+After=network-online.target postgresql.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=afribit-clans-payments
+Group=afribit-clans-payments
+WorkingDirectory=/srv/afribit-clans/current/backend
+EnvironmentFile=/etc/afribit-clans/worker.env
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStart=/srv/afribit-clans/current/venv/bin/python -m clans.treasury_worker
+Restart=on-failure
+RestartSec=5
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+MemoryMax=256M
+TasksMax=50
+
+[Install]
+WantedBy=multi-user.target

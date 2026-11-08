@@ -1,0 +1,3339 @@
+{
+  "components": {
+    "schemas": {
+      "AcceptInvite": {
+        "additionalProperties": false,
+        "properties": {
+          "accepted_custody": {
+            "title": "Accepted Custody",
+            "type": "boolean"
+          },
+          "accepted_signer": {
+            "default": false,
+            "title": "Accepted Signer",
+            "type": "boolean"
+          },
+          "token": {
+            "maxLength": 100,
+            "minLength": 32,
+            "title": "Token",
+            "type": "string"
+          }
+        },
+        "required": [
+          "token",
+          "accepted_custody"
+        ],
+        "title": "AcceptInvite",
+        "type": "object"
+      },
+      "AddressInput": {
+        "additionalProperties": false,
+        "properties": {
+          "address": {
+            "maxLength": 100,
+            "minLength": 14,
+            "title": "Address",
+            "type": "string"
+          }
+        },
+        "required": [
+          "address"
+        ],
+        "title": "AddressInput",
+        "type": "object"
+      },
+      "ClanInput": {
+        "additionalProperties": false,
+        "properties": {
+          "accepted_custody": {
+            "title": "Accepted Custody",
+            "type": "boolean"
+          },
+          "be_signer": {
+            "title": "Be Signer",
+            "type": "boolean"
+          },
+          "description": {
+            "default": "",
+            "maxLength": 500,
+            "title": "Description",
+            "type": "string"
+          },
+          "member_vote_quorum": {
+            "maximum": 100.0,
+            "minimum": 1.0,
+            "title": "Member Vote Quorum",
+            "type": "integer"
+          },
+          "name": {
+            "maxLength": 100,
+            "minLength": 2,
+            "title": "Name",
+            "type": "string"
+          },
+          "target_signers": {
+            "enum": [
+              3,
+              5,
+              7
+            ],
+            "title": "Target Signers",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "name",
+          "target_signers",
+          "member_vote_quorum",
+          "be_signer",
+          "accepted_custody"
+        ],
+        "title": "ClanInput",
+        "type": "object"
+      },
+      "ConfirmInput": {
+        "additionalProperties": false,
+        "properties": {
+          "wallet_code": {
+            "maxLength": 8,
+            "minLength": 8,
+            "title": "Wallet Code",
+            "type": "string"
+          }
+        },
+        "required": [
+          "wallet_code"
+        ],
+        "title": "ConfirmInput",
+        "type": "object"
+      },
+      "ContactInput": {
+        "additionalProperties": false,
+        "properties": {
+          "accepted_recovery": {
+            "default": false,
+            "title": "Accepted Recovery",
+            "type": "boolean"
+          },
+          "lightning_address": {
+            "anyOf": [
+              {
+                "maxLength": 254,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lightning Address"
+          },
+          "phone_number": {
+            "maxLength": 20,
+            "minLength": 9,
+            "title": "Phone Number",
+            "type": "string"
+          }
+        },
+        "required": [
+          "phone_number"
+        ],
+        "title": "ContactInput",
+        "type": "object"
+      },
+      "DepositInput": {
+        "additionalProperties": false,
+        "properties": {
+          "amount_sats": {
+            "anyOf": [
+              {
+                "exclusiveMinimum": 0.0,
+                "maximum": 10000000.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Amount Sats"
+          },
+          "grant_id": {
+            "anyOf": [
+              {
+                "maxLength": 36,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Grant Id"
+          },
+          "quote": {
+            "anyOf": [
+              {
+                "maxLength": 2000,
+                "minLength": 20,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Quote"
+          }
+        },
+        "title": "DepositInput",
+        "type": "object"
+      },
+      "DestinationInput": {
+        "additionalProperties": false,
+        "properties": {
+          "bolt11": {
+            "maxLength": 12010,
+            "minLength": 20,
+            "title": "Bolt11",
+            "type": "string"
+          }
+        },
+        "required": [
+          "bolt11"
+        ],
+        "title": "DestinationInput",
+        "type": "object"
+      },
+      "Finish": {
+        "additionalProperties": false,
+        "properties": {
+          "challenge_id": {
+            "maxLength": 36,
+            "title": "Challenge Id",
+            "type": "string"
+          },
+          "credential": {
+            "additionalProperties": true,
+            "title": "Credential",
+            "type": "object"
+          }
+        },
+        "required": [
+          "challenge_id",
+          "credential"
+        ],
+        "title": "Finish",
+        "type": "object"
+      },
+      "GrantInput": {
+        "additionalProperties": false,
+        "properties": {
+          "amount_sats": {
+            "anyOf": [
+              {
+                "exclusiveMinimum": 0.0,
+                "maximum": 100000000.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Amount Sats"
+          },
+          "purpose": {
+            "maxLength": 1000,
+            "minLength": 8,
+            "title": "Purpose",
+            "type": "string"
+          },
+          "quote": {
+            "anyOf": [
+              {
+                "maxLength": 2000,
+                "minLength": 100,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Quote"
+          }
+        },
+        "required": [
+          "purpose"
+        ],
+        "title": "GrantInput",
+        "type": "object"
+      },
+      "GrantQuoteInput": {
+        "additionalProperties": false,
+        "properties": {
+          "amount": {
+            "maxLength": 15,
+            "minLength": 1,
+            "title": "Amount",
+            "type": "string"
+          },
+          "currency": {
+            "pattern": "^[A-Z]{3}$",
+            "title": "Currency",
+            "type": "string"
+          }
+        },
+        "required": [
+          "currency",
+          "amount"
+        ],
+        "title": "GrantQuoteInput",
+        "type": "object"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "title": "Detail",
+            "type": "array"
+          }
+        },
+        "title": "HTTPValidationError",
+        "type": "object"
+      },
+      "InviteInput": {
+        "additionalProperties": false,
+        "properties": {
+          "is_signer": {
+            "default": false,
+            "title": "Is Signer",
+            "type": "boolean"
+          }
+        },
+        "title": "InviteInput",
+        "type": "object"
+      },
+      "KeyInput": {
+        "additionalProperties": false,
+        "properties": {
+          "key": {
+            "maxLength": 300,
+            "minLength": 20,
+            "title": "Key",
+            "type": "string"
+          }
+        },
+        "required": [
+          "key"
+        ],
+        "title": "KeyInput",
+        "type": "object"
+      },
+      "NextWalletInput": {
+        "additionalProperties": false,
+        "properties": {
+          "reason": {
+            "enum": [
+              "lost_key",
+              "stolen_phone",
+              "signatory_change",
+              "oversight_change",
+              "other"
+            ],
+            "title": "Reason",
+            "type": "string"
+          }
+        },
+        "required": [
+          "reason"
+        ],
+        "title": "NextWalletInput",
+        "type": "object"
+      },
+      "OversightSignatureInput": {
+        "additionalProperties": false,
+        "description": "The oversight tool's signed file, uploaded as it is.",
+        "properties": {
+          "clan_id": {
+            "anyOf": [
+              {
+                "maxLength": 36,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Clan Id"
+          },
+          "id": {
+            "anyOf": [
+              {
+                "maxLength": 36,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id"
+          },
+          "psbt": {
+            "maxLength": 400000,
+            "minLength": 20,
+            "title": "Psbt",
+            "type": "string"
+          },
+          "txid": {
+            "anyOf": [
+              {
+                "maxLength": 64,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Txid"
+          }
+        },
+        "required": [
+          "psbt"
+        ],
+        "title": "OversightSignatureInput",
+        "type": "object"
+      },
+      "ReauthInput": {
+        "additionalProperties": false,
+        "properties": {
+          "action": {
+            "enum": [
+              "add_passkey",
+              "recovery_codes",
+              "username"
+            ],
+            "title": "Action",
+            "type": "string"
+          },
+          "username": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Username"
+          }
+        },
+        "required": [
+          "action"
+        ],
+        "title": "ReauthInput",
+        "type": "object"
+      },
+      "Recover": {
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "maxLength": 200,
+            "minLength": 20,
+            "title": "Code",
+            "type": "string"
+          },
+          "handle": {
+            "maxLength": 80,
+            "title": "Handle",
+            "type": "string"
+          }
+        },
+        "required": [
+          "handle",
+          "code"
+        ],
+        "title": "Recover",
+        "type": "object"
+      },
+      "RecoveryCheck": {
+        "additionalProperties": false,
+        "properties": {
+          "request_id": {
+            "maxLength": 36,
+            "minLength": 36,
+            "title": "Request Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "request_id"
+        ],
+        "title": "RecoveryCheck",
+        "type": "object"
+      },
+      "RecoveryConsent": {
+        "additionalProperties": false,
+        "properties": {
+          "device_code": {
+            "maxLength": 20,
+            "minLength": 12,
+            "title": "Device Code",
+            "type": "string"
+          },
+          "member_checked": {
+            "title": "Member Checked",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "member_checked",
+          "device_code"
+        ],
+        "title": "RecoveryConsent",
+        "type": "object"
+      },
+      "RecoveryStart": {
+        "additionalProperties": false,
+        "properties": {
+          "handle": {
+            "maxLength": 80,
+            "minLength": 6,
+            "title": "Handle",
+            "type": "string"
+          }
+        },
+        "required": [
+          "handle"
+        ],
+        "title": "RecoveryStart",
+        "type": "object"
+      },
+      "SignatureInput": {
+        "additionalProperties": false,
+        "properties": {
+          "psbt": {
+            "maxLength": 400000,
+            "minLength": 20,
+            "title": "Psbt",
+            "type": "string"
+          }
+        },
+        "required": [
+          "psbt"
+        ],
+        "title": "SignatureInput",
+        "type": "object"
+      },
+      "Signup": {
+        "additionalProperties": false,
+        "properties": {
+          "accepted_recovery": {
+            "default": false,
+            "title": "Accepted Recovery",
+            "type": "boolean"
+          },
+          "accepted_terms": {
+            "title": "Accepted Terms",
+            "type": "boolean"
+          },
+          "display_name": {
+            "maxLength": 100,
+            "minLength": 2,
+            "title": "Display Name",
+            "type": "string"
+          },
+          "lightning_address": {
+            "anyOf": [
+              {
+                "maxLength": 254,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lightning Address"
+          },
+          "phone_number": {
+            "maxLength": 20,
+            "minLength": 9,
+            "title": "Phone Number",
+            "type": "string"
+          },
+          "username": {
+            "title": "Username",
+            "type": "string"
+          }
+        },
+        "required": [
+          "phone_number",
+          "display_name",
+          "username",
+          "accepted_terms"
+        ],
+        "title": "Signup",
+        "type": "object"
+      },
+      "Token": {
+        "additionalProperties": false,
+        "properties": {
+          "token": {
+            "maxLength": 100,
+            "minLength": 32,
+            "title": "Token",
+            "type": "string"
+          }
+        },
+        "required": [
+          "token"
+        ],
+        "title": "Token",
+        "type": "object"
+      },
+      "ValidationError": {
+        "properties": {
+          "ctx": {
+            "title": "Context",
+            "type": "object"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "title": "Location",
+            "type": "array"
+          },
+          "msg": {
+            "title": "Message",
+            "type": "string"
+          },
+          "type": {
+            "title": "Error Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError",
+        "type": "object"
+      },
+      "VoteInput": {
+        "additionalProperties": false,
+        "properties": {
+          "choice": {
+            "enum": [
+              "approve",
+              "reject",
+              "abstain"
+            ],
+            "title": "Choice",
+            "type": "string"
+          }
+        },
+        "required": [
+          "choice"
+        ],
+        "title": "VoteInput",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "AfriBit Clans",
+    "version": "1.7.0"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/api/account/access-recoveries": {
+      "get": {
+        "operationId": "own_recoveries_api_account_access_recoveries_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Own Recoveries"
+      }
+    },
+    "/api/account/access-recoveries/{recovery_id}/block/options": {
+      "post": {
+        "operationId": "block_options_api_account_access_recoveries__recovery_id__block_options_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "recovery_id",
+            "required": true,
+            "schema": {
+              "title": "Recovery Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Block Options"
+      }
+    },
+    "/api/account/access-recoveries/{recovery_id}/block/verify": {
+      "post": {
+        "operationId": "block_verify_api_account_access_recoveries__recovery_id__block_verify_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "recovery_id",
+            "required": true,
+            "schema": {
+              "title": "Recovery Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Finish"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Block Verify"
+      }
+    },
+    "/api/account/contact/options": {
+      "post": {
+        "operationId": "contact_options_api_account_contact_options_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ContactInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Contact Options"
+      }
+    },
+    "/api/account/contact/verify": {
+      "post": {
+        "operationId": "contact_verify_api_account_contact_verify_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Finish"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Contact Verify"
+      }
+    },
+    "/api/account/passkeys/verify": {
+      "post": {
+        "operationId": "add_passkey_api_account_passkeys_verify_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Finish"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Add Passkey"
+      }
+    },
+    "/api/account/reauth/options": {
+      "post": {
+        "operationId": "reauth_options_api_account_reauth_options_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReauthInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Reauth Options"
+      }
+    },
+    "/api/account/reauth/verify": {
+      "post": {
+        "operationId": "reauth_verify_api_account_reauth_verify_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Finish"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Reauth Verify"
+      }
+    },
+    "/api/account/security": {
+      "get": {
+        "operationId": "account_security_api_account_security_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Account Security"
+      }
+    },
+    "/api/auth/clan-recovery/options": {
+      "post": {
+        "operationId": "recovery_options_api_auth_clan_recovery_options_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RecoveryStart"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Recovery Options"
+      }
+    },
+    "/api/auth/clan-recovery/resume/options": {
+      "post": {
+        "operationId": "resume_options_api_auth_clan_recovery_resume_options_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RecoveryCheck"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Resume Options"
+      }
+    },
+    "/api/auth/clan-recovery/resume/verify": {
+      "post": {
+        "operationId": "resume_verify_api_auth_clan_recovery_resume_verify_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Finish"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Resume Verify"
+      }
+    },
+    "/api/auth/clan-recovery/verify": {
+      "post": {
+        "operationId": "recovery_verify_api_auth_clan_recovery_verify_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Finish"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Recovery Verify"
+      }
+    },
+    "/api/auth/clan-recovery/{recovery_id}": {
+      "get": {
+        "operationId": "recovery_status_api_auth_clan_recovery__recovery_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "recovery_id",
+            "required": true,
+            "schema": {
+              "title": "Recovery Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Recovery Status"
+      }
+    },
+    "/api/auth/clan-recovery/{recovery_id}/finish/options": {
+      "post": {
+        "operationId": "finish_options_api_auth_clan_recovery__recovery_id__finish_options_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "recovery_id",
+            "required": true,
+            "schema": {
+              "title": "Recovery Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Finish Options"
+      }
+    },
+    "/api/auth/clan-recovery/{recovery_id}/finish/verify": {
+      "post": {
+        "operationId": "finish_verify_api_auth_clan_recovery__recovery_id__finish_verify_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "recovery_id",
+            "required": true,
+            "schema": {
+              "title": "Recovery Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Finish"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Finish Verify"
+      }
+    },
+    "/api/auth/login/options": {
+      "post": {
+        "operationId": "login_options_api_auth_login_options_post",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Login Options"
+      }
+    },
+    "/api/auth/login/verify": {
+      "post": {
+        "operationId": "login_verify_api_auth_login_verify_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Finish"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Login Verify"
+      }
+    },
+    "/api/auth/logout": {
+      "post": {
+        "operationId": "logout_api_auth_logout_post",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Logout"
+      }
+    },
+    "/api/auth/recover/options": {
+      "post": {
+        "operationId": "recover_options_api_auth_recover_options_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Recover"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Recover Options"
+      }
+    },
+    "/api/auth/recover/verify": {
+      "post": {
+        "operationId": "recover_verify_api_auth_recover_verify_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Finish"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Recover Verify"
+      }
+    },
+    "/api/auth/register/options": {
+      "post": {
+        "operationId": "register_options_api_auth_register_options_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Signup"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Register Options"
+      }
+    },
+    "/api/auth/register/verify": {
+      "post": {
+        "operationId": "register_verify_api_auth_register_verify_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Finish"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Register Verify"
+      }
+    },
+    "/api/clans": {
+      "post": {
+        "operationId": "create_clan_api_clans_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClanInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Clan"
+      }
+    },
+    "/api/clans/{clan_id}": {
+      "get": {
+        "operationId": "detail_api_clans__clan_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "clan_id",
+            "required": true,
+            "schema": {
+              "title": "Clan Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "include_activity",
+            "required": false,
+            "schema": {
+              "default": true,
+              "title": "Include Activity",
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Detail"
+      }
+    },
+    "/api/clans/{clan_id}/access-recoveries/{recovery_id}/approval/options": {
+      "post": {
+        "operationId": "approve_options_api_clans__clan_id__access_recoveries__recovery_id__approval_options_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "clan_id",
+            "required": true,
+            "schema": {
+              "title": "Clan Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "recovery_id",
+            "required": true,
+            "schema": {
+              "title": "Recovery Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RecoveryConsent"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Approve Options"
+      }
+    },
+    "/api/clans/{clan_id}/access-recoveries/{recovery_id}/approval/verify": {
+      "post": {
+        "operationId": "approve_verify_api_clans__clan_id__access_recoveries__recovery_id__approval_verify_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "clan_id",
+            "required": true,
+            "schema": {
+              "title": "Clan Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "recovery_id",
+            "required": true,
+            "schema": {
+              "title": "Recovery Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Finish"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Approve Verify"
+      }
+    },
+    "/api/clans/{clan_id}/activity": {
+      "get": {
+        "operationId": "history_api_clans__clan_id__activity_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "clan_id",
+            "required": true,
+            "schema": {
+              "title": "Clan Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "month",
+            "required": true,
+            "schema": {
+              "pattern": "^\\d{4}-(0[1-9]|1[0-2])$",
+              "title": "Month",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "timezone",
+            "required": false,
+            "schema": {
+              "default": "UTC",
+              "maxLength": 64,
+              "title": "Timezone",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 700,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cursor"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 25,
+              "maximum": 50,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "History"
+      }
+    },
+    "/api/clans/{clan_id}/deposit-quote": {
+      "post": {
+        "operationId": "grant_quote_api_clans__clan_id__deposit_quote_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "clan_id",
+            "required": true,
+            "schema": {
+              "title": "Clan Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GrantQuoteInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Grant Quote"
+      }
+    },
+    "/api/clans/{clan_id}/deposits": {
+      "post": {
+        "operationId": "request_deposit_api_clans__clan_id__deposits_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "clan_id",
+            "required": true,
+            "schema": {
+              "title": "Clan Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DepositInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Request Deposit"
+      }
+    },
+    "/api/clans/{clan_id}/deposits/{incoming_id}": {
+      "get": {
+        "operationId": "get_deposit_api_clans__clan_id__deposits__incoming_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "clan_id",
+            "required": true,
+            "schema": {
+              "title": "Clan Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "incoming_id",
+            "required": true,
+            "schema": {
+              "title": "Incoming Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Deposit"
+      }
+    },
+    "/api/clans/{clan_id}/grant-quote": {
+      "post": {
+        "operationId": "grant_quote_api_clans__clan_id__grant_quote_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "clan_id",
+            "required": true,
+            "schema": {
+              "title": "Clan Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GrantQuoteInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Grant Quote"
+      }
+    },
+    "/api/clans/{clan_id}/grants": {
+      "post": {
+        "operationId": "grant_request_api_clans__clan_id__grants_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "clan_id",
+            "required": true,
+            "schema": {
+              "title": "Clan Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GrantInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Grant Request"
+      }
+    },
+    "/api/clans/{clan_id}/grants/{grant_id}/accept": {
+      "post": {
+        "operationId": "accept_grant_api_clans__clan_id__grants__grant_id__accept_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "clan_id",
+            "required": true,
+            "schema": {
+              "title": "Clan Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "grant_id",
+            "required": true,
+            "schema": {
+              "title": "Grant Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Accept Grant"
+      }
+    },
+    "/api/clans/{clan_id}/grants/{grant_id}/cancel": {
+      "post": {
+        "operationId": "cancel_grant_api_clans__clan_id__grants__grant_id__cancel_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "clan_id",
+            "required": true,
+            "schema": {
+              "title": "Clan Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "grant_id",
+            "required": true,
+            "schema": {
+              "title": "Grant Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Cancel Grant"
+      }
+    },
+    "/api/clans/{clan_id}/grants/{grant_id}/destination": {
+      "post": {
+        "operationId": "destination_api_clans__clan_id__grants__grant_id__destination_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "clan_id",
+            "required": true,
+            "schema": {
+              "title": "Clan Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "grant_id",
+            "required": true,
+            "schema": {
+              "title": "Grant Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DestinationInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Destination"
+      }
+    },
+    "/api/clans/{clan_id}/grants/{grant_id}/payment": {
+      "get": {
+        "operationId": "payment_api_clans__clan_id__grants__grant_id__payment_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "clan_id",
+            "required": true,
+            "schema": {
+              "title": "Clan Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "grant_id",
+            "required": true,
+            "schema": {
+              "title": "Grant Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Payment"
+      }
+    },
+    "/api/clans/{clan_id}/grants/{grant_id}/payment/approval/options": {
+      "post": {
+        "operationId": "approval_options_api_clans__clan_id__grants__grant_id__payment_approval_options_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "clan_id",
+            "required": true,
+            "schema": {
+              "title": "Clan Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "grant_id",
+            "required": true,
+            "schema": {
+              "title": "Grant Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Approval Options"
+      }
+    },
+    "/api/clans/{clan_id}/grants/{grant_id}/payment/approval/verify": {
+      "post": {
+        "operationId": "approval_verify_api_clans__clan_id__grants__grant_id__payment_approval_verify_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "clan_id",
+            "required": true,
+            "schema": {
+              "title": "Clan Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "grant_id",
+            "required": true,
+            "schema": {
+              "title": "Grant Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Finish"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Approval Verify"
+      }
+    },
+    "/api/clans/{clan_id}/grants/{grant_id}/payout-address": {
+      "post": {
+        "operationId": "set_payout_address_api_clans__clan_id__grants__grant_id__payout_address_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "clan_id",
+            "required": true,
+            "schema": {
+              "title": "Clan Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "grant_id",
+            "required": true,
+            "schema": {
+              "title": "Grant Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddressInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Set Payout Address"
+      }
+    },
+    "/api/clans/{clan_id}/grants/{grant_id}/payout-quote": {
+      "get": {
+        "operationId": "payout_quote_api_clans__clan_id__grants__grant_id__payout_quote_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "clan_id",
+            "required": true,
+            "schema": {
+              "title": "Clan Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "grant_id",
+            "required": true,
+            "schema": {
+              "title": "Grant Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "address",
+            "required": true,
+            "schema": {
+              "title": "Address",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Payout Quote"
+      }
+    },
+    "/api/clans/{clan_id}/grants/{grant_id}/vote": {
+      "post": {
+        "operationId": "vote_api_clans__clan_id__grants__grant_id__vote_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "clan_id",
+            "required": true,
+            "schema": {
+              "title": "Clan Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "grant_id",
+            "required": true,
+            "schema": {
+              "title": "Grant Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VoteInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Vote"
+      }
+    },
+    "/api/clans/{clan_id}/invitations": {
+      "post": {
+        "operationId": "invite_api_clans__clan_id__invitations_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "clan_id",
+            "required": true,
+            "schema": {
+              "title": "Clan Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InviteInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Invite"
+      }
+    },
+    "/api/clans/{clan_id}/invitations/{invitation_id}/revoke": {
+      "post": {
+        "operationId": "revoke_api_clans__clan_id__invitations__invitation_id__revoke_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "clan_id",
+            "required": true,
+            "schema": {
+              "title": "Clan Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "invitation_id",
+            "required": true,
+            "schema": {
+              "title": "Invitation Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Revoke"
+      }
+    },
+    "/api/clans/{clan_id}/wallet": {
+      "get": {
+        "operationId": "get_wallet_api_clans__clan_id__wallet_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "clan_id",
+            "required": true,
+            "schema": {
+              "title": "Clan Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Wallet"
+      }
+    },
+    "/api/clans/{clan_id}/wallet/address": {
+      "get": {
+        "operationId": "get_address_api_clans__clan_id__wallet_address_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "clan_id",
+            "required": true,
+            "schema": {
+              "title": "Clan Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "purpose",
+            "required": true,
+            "schema": {
+              "title": "Purpose",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "grant_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Grant Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Address"
+      }
+    },
+    "/api/clans/{clan_id}/wallet/alarms": {
+      "get": {
+        "description": "Alarms about this clan's wallets that members should know about, newest first.",
+        "operationId": "clan_alarms_api_clans__clan_id__wallet_alarms_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "clan_id",
+            "required": true,
+            "schema": {
+              "title": "Clan Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Clan Alarms"
+      }
+    },
+    "/api/clans/{clan_id}/wallet/confirm": {
+      "post": {
+        "operationId": "confirm_wallet_api_clans__clan_id__wallet_confirm_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "clan_id",
+            "required": true,
+            "schema": {
+              "title": "Clan Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConfirmInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Confirm Wallet"
+      }
+    },
+    "/api/clans/{clan_id}/wallet/keys": {
+      "post": {
+        "operationId": "register_key_api_clans__clan_id__wallet_keys_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "clan_id",
+            "required": true,
+            "schema": {
+              "title": "Clan Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/KeyInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Register Key"
+      }
+    },
+    "/api/clans/{clan_id}/wallet/next": {
+      "post": {
+        "description": "Start a new wallet generation. The current one keeps working until it's active.",
+        "operationId": "start_next_wallet_api_clans__clan_id__wallet_next_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "clan_id",
+            "required": true,
+            "schema": {
+              "title": "Clan Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NextWalletInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Start Next Wallet"
+      }
+    },
+    "/api/clans/{clan_id}/wallet/next/cancel": {
+      "post": {
+        "description": "Stop setting up a new generation. Nothing moves; the current wallet carries on.",
+        "operationId": "cancel_next_wallet_api_clans__clan_id__wallet_next_cancel_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "clan_id",
+            "required": true,
+            "schema": {
+              "title": "Clan Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Cancel Next Wallet"
+      }
+    },
+    "/api/clans/{clan_id}/wallet/payouts": {
+      "get": {
+        "operationId": "list_payouts_api_clans__clan_id__wallet_payouts_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "clan_id",
+            "required": true,
+            "schema": {
+              "title": "Clan Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Status"
+            }
+          },
+          {
+            "in": "query",
+            "name": "grant_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Grant Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Payouts"
+      }
+    },
+    "/api/clans/{clan_id}/wallet/payouts/{payout_id}": {
+      "get": {
+        "operationId": "get_payout_api_clans__clan_id__wallet_payouts__payout_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "clan_id",
+            "required": true,
+            "schema": {
+              "title": "Clan Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "payout_id",
+            "required": true,
+            "schema": {
+              "title": "Payout Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Payout"
+      }
+    },
+    "/api/clans/{clan_id}/wallet/payouts/{payout_id}/oversight-signature": {
+      "post": {
+        "description": "For the Afribit oversight tool, which has no Clans session.\n\nThe signature authenticates itself: only an oversight key's signature on this exact\npayment is accepted, and the chain watcher verifies it before broadcasting.",
+        "operationId": "oversight_sign_api_clans__clan_id__wallet_payouts__payout_id__oversight_signature_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "clan_id",
+            "required": true,
+            "schema": {
+              "title": "Clan Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "payout_id",
+            "required": true,
+            "schema": {
+              "title": "Payout Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OversightSignatureInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Oversight Sign"
+      }
+    },
+    "/api/clans/{clan_id}/wallet/payouts/{payout_id}/signature": {
+      "post": {
+        "operationId": "sign_payout_api_clans__clan_id__wallet_payouts__payout_id__signature_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "clan_id",
+            "required": true,
+            "schema": {
+              "title": "Clan Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "payout_id",
+            "required": true,
+            "schema": {
+              "title": "Payout Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SignatureInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Sign Payout"
+      }
+    },
+    "/api/clans/{clan_id}/wallet/receipts": {
+      "get": {
+        "operationId": "receipts_api_clans__clan_id__wallet_receipts_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "clan_id",
+            "required": true,
+            "schema": {
+              "title": "Clan Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "address",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Address"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Receipts"
+      }
+    },
+    "/api/invitations/accept": {
+      "post": {
+        "operationId": "accept_invite_api_invitations_accept_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AcceptInvite"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Accept Invite"
+      }
+    },
+    "/api/invitations/preview": {
+      "post": {
+        "operationId": "preview_api_invitations_preview_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Token"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Preview"
+      }
+    },
+    "/api/onboarding/complete": {
+      "post": {
+        "operationId": "onboard_api_onboarding_complete_post",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Onboard"
+      }
+    },
+    "/api/oversight/alarms": {
+      "get": {
+        "description": "Every clan's alarms for Afribit, newest first, optionally only after `since`.",
+        "operationId": "oversight_alarms_api_oversight_alarms_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "since",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Since"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Oversight Alarms"
+      }
+    },
+    "/api/oversight/payouts": {
+      "get": {
+        "description": "Payouts the clan has signed that wait for an Afribit approval, oldest first.",
+        "operationId": "oversight_payouts_api_oversight_payouts_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Oversight Payouts"
+      }
+    },
+    "/api/oversight/wallets": {
+      "get": {
+        "description": "Every clan's active wallet, for laptops to register after a phone check of its code.",
+        "operationId": "oversight_wallets_api_oversight_wallets_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Oversight Wallets"
+      }
+    },
+    "/api/rates/{currency}": {
+      "get": {
+        "operationId": "display_rate_api_rates__currency__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "currency",
+            "required": true,
+            "schema": {
+              "title": "Currency",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Display Rate"
+      }
+    },
+    "/api/session": {
+      "get": {
+        "operationId": "session_api_session_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Session"
+      }
+    },
+    "/health/ready": {
+      "get": {
+        "operationId": "ready_health_ready_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Ready"
+      }
+    }
+  }
+}

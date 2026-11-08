@@ -1,0 +1,11 @@
+[Unit]
+Description=Daily AfriBit Clans database backup
+
+[Timer]
+OnCalendar=*-*-* 02:30:00 UTC
+RandomizedDelaySec=300
+Persistent=true
+Unit=afribit-clans-backup.service
+
+[Install]
+WantedBy=timers.target

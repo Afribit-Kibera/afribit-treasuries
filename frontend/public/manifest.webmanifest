@@ -1,0 +1,28 @@
+{
+  "id": "/",
+  "name": "AfriBit Clans",
+  "short_name": "Clans",
+  "description": "Save together. Decide together. Bitcoin for your clan.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": ["finance", "social"],
+  "background_color": "#0c0d0c",
+  "theme_color": "#0c0d0c",
+  "icons": [
+    {
+      "src": "/assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -1,0 +1,204 @@
+/*
+ * Copied from frontend/src/styles.css: the phone app's colour tokens, fonts and base
+ * controls (inputs, primary/secondary/text buttons, focus ring). Not imported directly
+ * because that file loads fonts and artwork from the phone app's /assets folder and carries
+ * the phone layout. Fonts here come from the bundled Fontsource packages (see main.tsx), so
+ * the family names are the packages' own ("Sora Variable", "Space Grotesk Variable").
+ *
+ * Keep these values in step with frontend/src/styles.css.
+ */
+
+:root {
+  font-family: "Manrope Variable", sans-serif;
+  color: #f5f4ed;
+  background: #0c0d0c;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  --bg: #0c0d0c;
+  --surface: #181917;
+  --surface-raised: #222320;
+  --surface-subtle: #151614;
+  --text: #f5f4ed;
+  --muted: #a4a59d;
+  --quiet: #777b72;
+  --line: #ffffff14;
+  --line-strong: #ffffff21;
+  --accent: #ff940b;
+  --accent-hover: #ffab39;
+  --accent-ink: #14110b;
+  --accent-soft: #ff940b19;
+  --positive: #7bb886;
+  --positive-bg: #17341f;
+  --nav: #1c1d1a;
+  /* From live.css's .live-alert.error border. */
+  --danger: #b96347;
+  --danger-soft: #b9634714;
+  --serif: "Cormorant Garamond", Georgia, serif;
+  --heading: "Sora Variable", "Manrope Variable", sans-serif;
+  --money: "Space Grotesk Variable", "Manrope Variable", sans-serif;
+  color-scheme: dark;
+}
+
+/* The phone app's light theme, used when Windows is set to light. */
+@media (prefers-color-scheme: light) {
+  :root {
+    color-scheme: light;
+    color: #202b22;
+    background: #f6f5ee;
+    --bg: #f6f5ee;
+    --surface: #fdfcf7;
+    --surface-raised: #eeeee5;
+    --surface-subtle: #f0f0e7;
+    --text: #202b22;
+    --muted: #687063;
+    --quiet: #777f71;
+    --line: #263f2512;
+    --line-strong: #263f2525;
+    --accent: #256f49;
+    --accent-hover: #1c5b3a;
+    --accent-ink: #fffdf5;
+    --accent-soft: #256f4910;
+    --positive: #347648;
+    --positive-bg: #e3ecdc;
+    --nav: #fafaf4;
+    --danger: #a4492e;
+    --danger-soft: #a4492e10;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+}
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+button {
+  color: inherit;
+  cursor: pointer;
+  border: 0;
+  background: none;
+  transition:
+    background-color 0.18s,
+    color 0.18s,
+    border-color 0.18s,
+    transform 0.18s;
+}
+button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+button svg {
+  flex-shrink: 0;
+}
+button:focus-visible,
+a:focus-visible,
+select:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+summary:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+input,
+textarea,
+select {
+  color: var(--text);
+  border: 1px solid var(--line-strong);
+  background: var(--surface-subtle);
+  width: 100%;
+  padding: 13px 15px;
+  border-radius: 11px;
+}
+input::placeholder,
+textarea::placeholder {
+  color: var(--quiet);
+}
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+h1,
+h2 {
+  font-family: var(--serif);
+  font-weight: 700;
+}
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 1.9px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+}
+.primary-button {
+  min-height: 46px;
+  border-radius: 10px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-size: 14px;
+  font-weight: 800;
+  padding: 12px 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.primary-button:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+.secondary-button {
+  min-height: 46px;
+  border: 1px solid var(--line-strong);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 12px 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.secondary-button:hover:not(:disabled) {
+  background: var(--surface-raised);
+}
+.text-button {
+  padding: 4px 0;
+  display: inline-flex;
+  gap: 7px;
+  align-items: center;
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 14px;
+}
+.text-button:hover:not(:disabled) {
+  color: var(--accent-hover);
+}
+.spin {
+  animation: spin 0.9s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .spin {
+    animation-duration: 2.5s;
+  }
+}

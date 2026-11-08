@@ -1,0 +1,24 @@
+[Unit]
+Description=AfriBit Clans PostgreSQL backup
+After=postgresql.service
+
+[Service]
+Type=oneshot
+User=afribit-clans-backup
+Group=afribit-clans-backup
+EnvironmentFile=/etc/afribit-clans/backup.env
+ExecStart=/srv/afribit-clans/current/venv/bin/python -m clans.backup
+WorkingDirectory=/srv/afribit-clans/current/backend
+StateDirectory=afribit-clans-backup
+StateDirectoryMode=0700
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/afribit-clans-backup
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+TimeoutStartSec=15min

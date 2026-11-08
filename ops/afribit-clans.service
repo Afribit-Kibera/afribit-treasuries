@@ -1,0 +1,35 @@
+[Unit]
+Description=AfriBit Clans standalone application
+After=network-online.target postgresql.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=afribit-clans
+Group=afribit-clans
+WorkingDirectory=/srv/afribit-clans/current/backend
+EnvironmentFile=/etc/afribit-clans/backend.env
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStart=/srv/afribit-clans/current/venv/bin/python -m uvicorn clans.live_app:create_app --factory --host 127.0.0.1 --port 8410 --workers 2 --no-access-log --log-level warning --proxy-headers --forwarded-allow-ips 127.0.0.1 --limit-concurrency 100 --timeout-keep-alive 5
+Restart=on-failure
+RestartSec=5
+UMask=0077
+StateDirectory=afribit-clans
+StateDirectoryMode=0700
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+InaccessiblePaths=-/srv/afribit-clans/frontend-releases -/etc/afribit-clans/trust
+ReadWritePaths=/var/lib/afribit-clans
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+MemoryMax=512M
+TasksMax=100
+
+[Install]
+WantedBy=multi-user.target

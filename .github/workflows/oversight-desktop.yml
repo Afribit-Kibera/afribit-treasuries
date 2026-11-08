@@ -1,0 +1,129 @@
+name: Oversight desktop app
+
+# Builds the Windows installer for the oversight laptops. Pull requests that touch the app or
+# its core build it to check it still builds. A tag like oversight-v0.1.0 also publishes it as a
+# GitHub release, with its SHA-256 in the notes. The installer isn't Authenticode-signed:
+# people check the SHA-256 they got by a separate message (docs/oversight-desktop-app.md).
+
+on:
+  pull_request:
+    paths:
+      - "oversight-desktop/**"
+      - "backend/src/clans/__init__.py"
+      - "backend/src/clans/clan_wallet.py"
+      - "backend/src/clans/oversight.py"
+      - "backend/src/clans/oversight_guide.py"
+      - "backend/src/clans/oversight_service.py"
+      - "backend/src/clans/recover.py"
+      - "scripts/build_oversight_desktop.py"
+      - ".github/workflows/oversight-desktop.yml"
+  push:
+    tags: ["oversight-v*"]
+  workflow_dispatch:
+    inputs:
+      clans_url:
+        description: "Server built in (empty: the app asks)"
+        default: ""
+        required: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: oversight-desktop-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: windows-2025
+    timeout-minutes: 60
+    env:
+      CLANS_URL: ${{ inputs.clans_url }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Check the Clans address
+        shell: pwsh
+        run: |
+          if (-not $env:CLANS_URL) { exit 0 }
+          if ($env:CLANS_URL -notmatch '^https://[a-z0-9.-]+$') { throw "Not a Clans address: $env:CLANS_URL" }
+          "OVERSIGHT_CLANS_URL=$env:CLANS_URL" >> $env:GITHUB_ENV
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: oversight-desktop/package-lock.json
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: "oversight-desktop/src-tauri -> target"
+
+      - name: Bundle the Python core
+        run: python scripts/build_oversight_desktop.py
+
+      - name: Build the screens
+        working-directory: oversight-desktop
+        run: |
+          npm ci
+          npm run build
+
+      - name: Build the installer
+        working-directory: oversight-desktop
+        shell: pwsh
+        run: |
+          rustc --version
+          if (Test-Path src-tauri/Cargo.lock) { npx tauri build --ci -- --locked } else { npx tauri build --ci }
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+      - name: Collect the release files
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force release | Out-Null
+          $installer = Get-ChildItem "oversight-desktop/src-tauri/target/release/bundle/nsis/*-setup.exe" | Select-Object -First 1
+          $name = "Afribit-Oversight-Setup-$((Get-Content oversight-desktop/src-tauri/tauri.conf.json | ConvertFrom-Json).version).exe"
+          Copy-Item $installer.FullName "release/$name"
+          Copy-Item oversight-desktop/src-tauri/Cargo.lock release/Cargo.lock
+          $hash = (Get-FileHash "release/$name" -Algorithm SHA256).Hash.ToLower()
+          "$hash  $name" | Out-File -Encoding ascii release/SHA256SUMS.txt
+          "Clans address: $(if ($env:OVERSIGHT_CLANS_URL) { $env:OVERSIGHT_CLANS_URL } else { 'asked on first start' })" | Out-File -Encoding ascii -Append release/SHA256SUMS.txt
+          "Commit: $env:GITHUB_SHA" | Out-File -Encoding ascii -Append release/SHA256SUMS.txt
+          Get-Content release/SHA256SUMS.txt
+          "### Afribit Oversight installer" >> $env:GITHUB_STEP_SUMMARY
+          "SHA-256 ``$hash``, $([math]::Round($installer.Length / 1MB)) MB" >> $env:GITHUB_STEP_SUMMARY
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: afribit-oversight-windows
+          path: release/
+          if-no-files-found: error
+          retention-days: 30
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/oversight-v')
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: afribit-oversight-windows
+          path: release
+      - name: Publish the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          notes="$(cat release/SHA256SUMS.txt)"
+          gh release create "$TAG" release/*.exe release/SHA256SUMS.txt \
+            --repo "$GITHUB_REPOSITORY" --title "Afribit Oversight ${TAG#oversight-v}" \
+            --prerelease --notes "Check the SHA-256 against the one the team sends you separately before installing.
+
+          $notes"

@@ -1,0 +1,136 @@
+.wallet-card {
+  margin: 24px 0;
+  padding: 22px;
+  border: 1px solid var(--line-strong);
+  border-radius: 18px;
+  background: var(--surface);
+}
+.wallet-card h3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.wallet-card p,
+.wallet-flow p {
+  line-height: 1.7;
+}
+.wallet-flow {
+  display: grid;
+  gap: 18px;
+  min-width: 0;
+}
+.wallet-flow form {
+  display: grid;
+  gap: 16px;
+}
+.wallet-flow button,
+.wallet-card > button {
+  min-height: 48px;
+}
+.wallet-flow input {
+  font-size: 16px;
+  min-width: 0;
+}
+.wallet-waiting {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
+}
+.wallet-waiting li {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 14px;
+}
+.wallet-waiting li span:last-child {
+  color: var(--muted);
+}
+.wallet-words {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  list-style: none;
+  padding: 0;
+  gap: 12px;
+}
+.wallet-words li {
+  font-size: 18px;
+  padding: 10px 0;
+  overflow-wrap: anywhere;
+}
+.wallet-words li span {
+  color: var(--muted);
+  font-size: 12px;
+  margin-right: 8px;
+}
+.wallet-code {
+  font: 600 clamp(30px, 9vw, 48px)/1.5 var(--money);
+  letter-spacing: 3px;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+.wallet-stop {
+  border: 1px solid var(--line-strong);
+  border-radius: 16px;
+  padding: 20px;
+  line-height: 1.7;
+}
+.wallet-address {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  font: 500 14px/1.7 var(--money);
+}
+.wallet-amounts {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px;
+  line-height: 1.6;
+}
+.wallet-amounts dd {
+  margin: 0;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+.wallet-amounts dt {
+  color: var(--muted);
+}
+.wallet-amounts small {
+  display: block;
+}
+.wallet-money {
+  display: inline-block;
+}
+.wallet-money small {
+  display: block;
+  color: var(--muted);
+  font-size: 0.8em;
+  font-weight: 400;
+  line-height: 1.7;
+}
+.wallet-restore {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.wallet-restore label {
+  min-width: 0;
+}
+.wallet-restore input {
+  width: 100%;
+}
+.wallet-timeline {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+.wallet-timeline li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  line-height: 1.6;
+}
+.wallet-card button {
+  margin-top: 12px;
+}

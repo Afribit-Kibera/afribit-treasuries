@@ -1,0 +1,34 @@
+clans.afribit.africa {
+  encode zstd gzip
+  request_body {
+    max_size 64KB
+  }
+  header {
+    Strict-Transport-Security "max-age=31536000"
+    X-Content-Type-Options nosniff
+    X-Frame-Options DENY
+    Referrer-Policy no-referrer
+    Permissions-Policy "camera=(), microphone=(), geolocation=(self), payment=(), clipboard-read=(), clipboard-write=(self), publickey-credentials-create=(self), publickey-credentials-get=(self)"
+    Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'"
+    -Server
+  }
+  @api path /api/*
+  handle @api {
+    reverse_proxy 127.0.0.1:8410
+  }
+  @health path /health/ready
+  handle @health {
+    reverse_proxy 127.0.0.1:8410
+  }
+  @private path /.git* /.env* /backend* /scripts* /ops* /docs* /openapi.json /__demo* /api /health
+  handle @private {
+    respond 404
+  }
+  handle {
+    @clan_join path /join /join/
+    rewrite @clan_join /index.html
+    root * /srv/afribit-clans/frontend-current
+    header Cache-Control "no-cache"
+    file_server
+  }
+}

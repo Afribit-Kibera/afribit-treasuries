@@ -1,0 +1,23 @@
+[Unit]
+Description=AfriBit Clans local PostgreSQL snapshot (offsite deferred)
+After=postgresql.service
+
+[Service]
+Type=oneshot
+User=postgres
+Group=postgres
+ExecStart=/usr/bin/python3 /srv/afribit-clans/current/ops/backup_local.py
+StateDirectory=afribit-clans-local-backup
+StateDirectoryMode=0700
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateNetwork=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/afribit-clans-local-backup
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+TimeoutStartSec=15min

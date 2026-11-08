@@ -1,0 +1,37 @@
+[Unit]
+Description=AfriBit Clans chain watcher for clan wallets (test networks)
+After=network-online.target postgresql.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+# Its own account: the watcher reads a public block explorer and never needs BTCPay
+# credentials, so it can't read worker.env. It holds no key that can spend.
+User=afribit-clans-chain
+Group=afribit-clans-chain
+WorkingDirectory=/srv/afribit-clans/current/backend
+# CLANS_DATABASE_URL (the worker database role), CLANS_CLAN_WALLETS_ENABLED,
+# CLANS_CLAN_WALLET_NETWORK, CLANS_CLAN_WALLET_OVERSIGHT_KEYS and, optionally,
+# CLANS_CLAN_WALLET_ESPLORA_URL, CLANS_CLAN_WALLET_MAX_FEE_SATS,
+# CLANS_CLAN_WALLET_MAX_SWEEP_FEE_SATS and CLANS_CLAN_WALLET_BUMP_AFTER_MINUTES.
+EnvironmentFile=/etc/afribit-clans/chain-watcher.env
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStart=/srv/afribit-clans/current/venv/bin/python -m clans.chain_watcher
+Restart=on-failure
+RestartSec=15
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+MemoryMax=384M
+TasksMax=50
+
+[Install]
+WantedBy=multi-user.target

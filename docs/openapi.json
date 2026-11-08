@@ -1,0 +1,1829 @@
+{
+  "components": {
+    "schemas": {
+      "AcceptTerms": {
+        "additionalProperties": false,
+        "properties": {
+          "action": {
+            "const": "accept_terms",
+            "title": "Action",
+            "type": "string"
+          },
+          "grant_id": {
+            "maxLength": 36,
+            "minLength": 1,
+            "title": "Grant Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "grant_id",
+          "action"
+        ],
+        "title": "AcceptTerms",
+        "type": "object"
+      },
+      "ApproveIntent": {
+        "additionalProperties": false,
+        "properties": {
+          "action": {
+            "const": "approve_intent",
+            "title": "Action",
+            "type": "string"
+          },
+          "grant_id": {
+            "maxLength": 36,
+            "minLength": 1,
+            "title": "Grant Id",
+            "type": "string"
+          },
+          "intent_sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Intent Sha256",
+            "type": "string"
+          }
+        },
+        "required": [
+          "grant_id",
+          "action",
+          "intent_sha256"
+        ],
+        "title": "ApproveIntent",
+        "type": "object"
+      },
+      "CancelIntent": {
+        "additionalProperties": false,
+        "properties": {
+          "action": {
+            "const": "cancel_intent",
+            "title": "Action",
+            "type": "string"
+          },
+          "grant_id": {
+            "maxLength": 36,
+            "minLength": 1,
+            "title": "Grant Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "grant_id",
+          "action"
+        ],
+        "title": "CancelIntent",
+        "type": "object"
+      },
+      "ClanView": {
+        "properties": {
+          "created_at": {
+            "title": "Created At",
+            "type": "string"
+          },
+          "governance_ready": {
+            "title": "Governance Ready",
+            "type": "boolean"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "member_count": {
+            "title": "Member Count",
+            "type": "integer"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "payment_mode": {
+            "const": "simulation",
+            "default": "simulation",
+            "title": "Payment Mode",
+            "type": "string"
+          },
+          "policy": {
+            "$ref": "#/components/schemas/PolicyView"
+          },
+          "signer_count": {
+            "title": "Signer Count",
+            "type": "integer"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "status",
+          "created_at",
+          "policy",
+          "member_count",
+          "signer_count",
+          "governance_ready"
+        ],
+        "title": "ClanView",
+        "type": "object"
+      },
+      "Contribution": {
+        "additionalProperties": false,
+        "properties": {
+          "action": {
+            "const": "contribute",
+            "title": "Action",
+            "type": "string"
+          },
+          "amount_sats": {
+            "exclusiveMinimum": 0.0,
+            "maximum": 2100000000000000.0,
+            "title": "Amount Sats",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "action",
+          "amount_sats"
+        ],
+        "title": "Contribution",
+        "type": "object"
+      },
+      "CreateClan": {
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Name",
+            "type": "string"
+          },
+          "policy": {
+            "$ref": "#/components/schemas/InitialPolicy"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "title": "CreateClan",
+        "type": "object"
+      },
+      "ErrorDetail": {
+        "properties": {
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "message": {
+            "title": "Message",
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "title": "ErrorDetail",
+        "type": "object"
+      },
+      "ErrorResponse": {
+        "properties": {
+          "error": {
+            "$ref": "#/components/schemas/ErrorDetail"
+          }
+        },
+        "required": [
+          "error"
+        ],
+        "title": "ErrorResponse",
+        "type": "object"
+      },
+      "Execute": {
+        "additionalProperties": false,
+        "properties": {
+          "action": {
+            "const": "execute",
+            "title": "Action",
+            "type": "string"
+          },
+          "actual_fee_sats": {
+            "default": 0,
+            "maximum": 2100000000000000.0,
+            "minimum": 0.0,
+            "title": "Actual Fee Sats",
+            "type": "integer"
+          },
+          "grant_id": {
+            "maxLength": 36,
+            "minLength": 1,
+            "title": "Grant Id",
+            "type": "string"
+          },
+          "intent_sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Intent Sha256",
+            "type": "string"
+          }
+        },
+        "required": [
+          "grant_id",
+          "action",
+          "intent_sha256"
+        ],
+        "title": "Execute",
+        "type": "object"
+      },
+      "FreezeIntent": {
+        "additionalProperties": false,
+        "properties": {
+          "action": {
+            "const": "freeze_intent",
+            "title": "Action",
+            "type": "string"
+          },
+          "destination": {
+            "pattern": "^sim:[A-Za-z0-9_-]{1,100}$",
+            "title": "Destination",
+            "type": "string"
+          },
+          "expires_in_seconds": {
+            "default": 300,
+            "maximum": 3600.0,
+            "minimum": 1.0,
+            "title": "Expires In Seconds",
+            "type": "integer"
+          },
+          "fee_ceiling_sats": {
+            "default": 10,
+            "maximum": 2100000000000000.0,
+            "minimum": 0.0,
+            "title": "Fee Ceiling Sats",
+            "type": "integer"
+          },
+          "grant_id": {
+            "maxLength": 36,
+            "minLength": 1,
+            "title": "Grant Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "grant_id",
+          "action",
+          "destination"
+        ],
+        "title": "FreezeIntent",
+        "type": "object"
+      },
+      "HealthView": {
+        "properties": {
+          "demo_auth_enabled": {
+            "title": "Demo Auth Enabled",
+            "type": "boolean"
+          },
+          "payment_execution_enabled": {
+            "const": false,
+            "default": false,
+            "title": "Payment Execution Enabled",
+            "type": "boolean"
+          },
+          "payment_mode": {
+            "const": "simulation",
+            "default": "simulation",
+            "title": "Payment Mode",
+            "type": "string"
+          },
+          "status": {
+            "const": "ok",
+            "default": "ok",
+            "title": "Status",
+            "type": "string"
+          },
+          "version": {
+            "title": "Version",
+            "type": "string"
+          }
+        },
+        "required": [
+          "version",
+          "demo_auth_enabled"
+        ],
+        "title": "HealthView",
+        "type": "object"
+      },
+      "InitialPolicy": {
+        "additionalProperties": false,
+        "properties": {
+          "beneficiary_can_approve": {
+            "default": false,
+            "title": "Beneficiary Can Approve",
+            "type": "boolean"
+          },
+          "currency": {
+            "default": "KES",
+            "enum": [
+              "KES",
+              "BTC"
+            ],
+            "title": "Currency",
+            "type": "string"
+          },
+          "member_vote_quorum": {
+            "default": 1,
+            "maximum": 1000.0,
+            "minimum": 1.0,
+            "title": "Member Vote Quorum",
+            "type": "integer"
+          },
+          "signer_threshold": {
+            "default": 2,
+            "maximum": 100.0,
+            "minimum": 1.0,
+            "title": "Signer Threshold",
+            "type": "integer"
+          }
+        },
+        "title": "InitialPolicy",
+        "type": "object"
+      },
+      "MemberView": {
+        "properties": {
+          "is_signer": {
+            "title": "Is Signer",
+            "type": "boolean"
+          },
+          "role": {
+            "title": "Role",
+            "type": "string"
+          },
+          "user": {
+            "$ref": "#/components/schemas/UserView"
+          }
+        },
+        "required": [
+          "user",
+          "role",
+          "is_signer"
+        ],
+        "title": "MemberView",
+        "type": "object"
+      },
+      "PolicyView": {
+        "additionalProperties": false,
+        "properties": {
+          "beneficiary_can_approve": {
+            "default": false,
+            "title": "Beneficiary Can Approve",
+            "type": "boolean"
+          },
+          "currency": {
+            "default": "KES",
+            "enum": [
+              "KES",
+              "BTC"
+            ],
+            "title": "Currency",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "member_vote_quorum": {
+            "default": 1,
+            "maximum": 1000.0,
+            "minimum": 1.0,
+            "title": "Member Vote Quorum",
+            "type": "integer"
+          },
+          "signer_threshold": {
+            "default": 2,
+            "maximum": 100.0,
+            "minimum": 1.0,
+            "title": "Signer Threshold",
+            "type": "integer"
+          },
+          "version": {
+            "title": "Version",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "version"
+        ],
+        "title": "PolicyView",
+        "type": "object"
+      },
+      "ProposeAmendment": {
+        "additionalProperties": false,
+        "properties": {
+          "action": {
+            "const": "propose_amendment",
+            "title": "Action",
+            "type": "string"
+          },
+          "grant_id": {
+            "maxLength": 36,
+            "minLength": 1,
+            "title": "Grant Id",
+            "type": "string"
+          },
+          "new_outstanding_minor": {
+            "maximum": 2100000000000000.0,
+            "minimum": 0.0,
+            "title": "New Outstanding Minor",
+            "type": "integer"
+          },
+          "reason": {
+            "maxLength": 500,
+            "minLength": 1,
+            "title": "Reason",
+            "type": "string"
+          }
+        },
+        "required": [
+          "grant_id",
+          "action",
+          "new_outstanding_minor",
+          "reason"
+        ],
+        "title": "ProposeAmendment",
+        "type": "object"
+      },
+      "ProviderHealth": {
+        "properties": {
+          "execution_enabled": {
+            "const": false,
+            "default": false,
+            "title": "Execution Enabled",
+            "type": "boolean"
+          },
+          "reachable": {
+            "title": "Reachable",
+            "type": "boolean"
+          },
+          "synchronized": {
+            "title": "Synchronized",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "reachable",
+          "synchronized"
+        ],
+        "title": "ProviderHealth",
+        "type": "object"
+      },
+      "Repay": {
+        "additionalProperties": false,
+        "properties": {
+          "action": {
+            "const": "repay",
+            "title": "Action",
+            "type": "string"
+          },
+          "amount_sats": {
+            "exclusiveMinimum": 0.0,
+            "maximum": 2100000000000000.0,
+            "title": "Amount Sats",
+            "type": "integer"
+          },
+          "grant_id": {
+            "maxLength": 36,
+            "minLength": 1,
+            "title": "Grant Id",
+            "type": "string"
+          },
+          "method": {
+            "default": "lightning",
+            "enum": [
+              "lightning",
+              "otc"
+            ],
+            "title": "Method",
+            "type": "string"
+          },
+          "remitter_user_id": {
+            "anyOf": [
+              {
+                "maxLength": 36,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Remitter User Id"
+          },
+          "settlement_reference": {
+            "pattern": "^sim:[A-Za-z0-9_-]{1,100}$",
+            "title": "Settlement Reference",
+            "type": "string"
+          }
+        },
+        "required": [
+          "grant_id",
+          "action",
+          "amount_sats",
+          "settlement_reference"
+        ],
+        "title": "Repay",
+        "type": "object"
+      },
+      "RequestGrant": {
+        "additionalProperties": false,
+        "properties": {
+          "action": {
+            "const": "request_grant",
+            "title": "Action",
+            "type": "string"
+          },
+          "amount_sats": {
+            "exclusiveMinimum": 0.0,
+            "maximum": 2100000000000000.0,
+            "title": "Amount Sats",
+            "type": "integer"
+          },
+          "kes_minor_per_1000_sats": {
+            "default": 100,
+            "exclusiveMinimum": 0.0,
+            "maximum": 100000000.0,
+            "title": "Kes Minor Per 1000 Sats",
+            "type": "integer"
+          },
+          "obligation_currency": {
+            "default": "BTC",
+            "enum": [
+              "BTC",
+              "KES"
+            ],
+            "title": "Obligation Currency",
+            "type": "string"
+          },
+          "purpose": {
+            "maxLength": 500,
+            "minLength": 1,
+            "title": "Purpose",
+            "type": "string"
+          }
+        },
+        "required": [
+          "action",
+          "amount_sats",
+          "purpose"
+        ],
+        "title": "RequestGrant",
+        "type": "object"
+      },
+      "SimulationView": {
+        "properties": {
+          "clan_id": {
+            "title": "Clan Id",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "mode": {
+            "const": "simulation",
+            "default": "simulation",
+            "title": "Mode",
+            "type": "string"
+          },
+          "real_payments_enabled": {
+            "const": false,
+            "default": false,
+            "title": "Real Payments Enabled",
+            "type": "boolean"
+          },
+          "revision": {
+            "title": "Revision",
+            "type": "integer"
+          },
+          "state": {
+            "additionalProperties": true,
+            "title": "State",
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "clan_id",
+          "revision",
+          "state"
+        ],
+        "title": "SimulationView",
+        "type": "object"
+      },
+      "StartSimulation": {
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "default": "Circular grant demonstration",
+            "maxLength": 500,
+            "minLength": 1,
+            "title": "Name",
+            "type": "string"
+          }
+        },
+        "title": "StartSimulation",
+        "type": "object"
+      },
+      "UserView": {
+        "properties": {
+          "display_name": {
+            "title": "Display Name",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "is_test_user": {
+            "title": "Is Test User",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "display_name",
+          "is_test_user"
+        ],
+        "title": "UserView",
+        "type": "object"
+      },
+      "Vote": {
+        "additionalProperties": false,
+        "properties": {
+          "action": {
+            "const": "vote",
+            "title": "Action",
+            "type": "string"
+          },
+          "choice": {
+            "enum": [
+              "approve",
+              "reject",
+              "abstain"
+            ],
+            "title": "Choice",
+            "type": "string"
+          },
+          "grant_id": {
+            "maxLength": 36,
+            "minLength": 1,
+            "title": "Grant Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "grant_id",
+          "action",
+          "choice"
+        ],
+        "title": "Vote",
+        "type": "object"
+      },
+      "VoteAmendment": {
+        "additionalProperties": false,
+        "properties": {
+          "action": {
+            "const": "vote_amendment",
+            "title": "Action",
+            "type": "string"
+          },
+          "amendment_id": {
+            "maxLength": 36,
+            "minLength": 1,
+            "title": "Amendment Id",
+            "type": "string"
+          },
+          "choice": {
+            "enum": [
+              "approve",
+              "reject",
+              "abstain"
+            ],
+            "title": "Choice",
+            "type": "string"
+          },
+          "grant_id": {
+            "maxLength": 36,
+            "minLength": 1,
+            "title": "Grant Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "grant_id",
+          "action",
+          "amendment_id",
+          "choice"
+        ],
+        "title": "VoteAmendment",
+        "type": "object"
+      }
+    },
+    "securitySchemes": {
+      "HTTPBearer": {
+        "description": "Internal demo user token; not production login",
+        "scheme": "bearer",
+        "type": "http"
+      }
+    }
+  },
+  "info": {
+    "description": "Backend pilot: clan membership and initial governance policy. Demo authentication is opt-in. Payment execution is not implemented.",
+    "title": "Afribit Clans API",
+    "version": "0.1.0"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/api/v1/clans": {
+      "get": {
+        "operationId": "list_clans_api_v1_clans_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 50,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "minimum": 0,
+              "title": "Offset",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ClanView"
+                  },
+                  "title": "Response List Clans Api V1 Clans Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "List Clans",
+        "tags": [
+          "Clans"
+        ]
+      },
+      "post": {
+        "operationId": "create_clan_api_v1_clans_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateClan"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClanView"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Create Clan",
+        "tags": [
+          "Clans"
+        ]
+      }
+    },
+    "/api/v1/clans/{clan_id}": {
+      "get": {
+        "operationId": "get_clan_api_v1_clans__clan_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "clan_id",
+            "required": true,
+            "schema": {
+              "title": "Clan Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClanView"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Get Clan",
+        "tags": [
+          "Clans"
+        ]
+      }
+    },
+    "/api/v1/clans/{clan_id}/members": {
+      "get": {
+        "operationId": "members_api_v1_clans__clan_id__members_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "clan_id",
+            "required": true,
+            "schema": {
+              "title": "Clan Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 50,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "minimum": 0,
+              "title": "Offset",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/MemberView"
+                  },
+                  "title": "Response Members Api V1 Clans  Clan Id  Members Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Members",
+        "tags": [
+          "Clans"
+        ]
+      }
+    },
+    "/api/v1/clans/{clan_id}/simulations": {
+      "post": {
+        "operationId": "start_simulation_api_v1_clans__clan_id__simulations_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "clan_id",
+            "required": true,
+            "schema": {
+              "title": "Clan Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "maxLength": 100,
+              "minLength": 1,
+              "title": "Idempotency-Key",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StartSimulation"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimulationView"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Start Simulation",
+        "tags": [
+          "Simulation"
+        ]
+      }
+    },
+    "/api/v1/clans/{clan_id}/simulations/{run_id}": {
+      "get": {
+        "operationId": "get_simulation_api_v1_clans__clan_id__simulations__run_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "clan_id",
+            "required": true,
+            "schema": {
+              "title": "Clan Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "run_id",
+            "required": true,
+            "schema": {
+              "title": "Run Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimulationView"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Get Simulation",
+        "tags": [
+          "Simulation"
+        ]
+      }
+    },
+    "/api/v1/clans/{clan_id}/simulations/{run_id}/commands": {
+      "post": {
+        "operationId": "simulation_command_api_v1_clans__clan_id__simulations__run_id__commands_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "clan_id",
+            "required": true,
+            "schema": {
+              "title": "Clan Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "run_id",
+            "required": true,
+            "schema": {
+              "title": "Run Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "maxLength": 100,
+              "minLength": 1,
+              "title": "Idempotency-Key",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "discriminator": {
+                  "mapping": {
+                    "accept_terms": "#/components/schemas/AcceptTerms",
+                    "approve_intent": "#/components/schemas/ApproveIntent",
+                    "cancel_intent": "#/components/schemas/CancelIntent",
+                    "contribute": "#/components/schemas/Contribution",
+                    "execute": "#/components/schemas/Execute",
+                    "freeze_intent": "#/components/schemas/FreezeIntent",
+                    "propose_amendment": "#/components/schemas/ProposeAmendment",
+                    "repay": "#/components/schemas/Repay",
+                    "request_grant": "#/components/schemas/RequestGrant",
+                    "vote": "#/components/schemas/Vote",
+                    "vote_amendment": "#/components/schemas/VoteAmendment"
+                  },
+                  "propertyName": "action"
+                },
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/Contribution"
+                  },
+                  {
+                    "$ref": "#/components/schemas/RequestGrant"
+                  },
+                  {
+                    "$ref": "#/components/schemas/Vote"
+                  },
+                  {
+                    "$ref": "#/components/schemas/AcceptTerms"
+                  },
+                  {
+                    "$ref": "#/components/schemas/FreezeIntent"
+                  },
+                  {
+                    "$ref": "#/components/schemas/ApproveIntent"
+                  },
+                  {
+                    "$ref": "#/components/schemas/Execute"
+                  },
+                  {
+                    "$ref": "#/components/schemas/CancelIntent"
+                  },
+                  {
+                    "$ref": "#/components/schemas/Repay"
+                  },
+                  {
+                    "$ref": "#/components/schemas/ProposeAmendment"
+                  },
+                  {
+                    "$ref": "#/components/schemas/VoteAmendment"
+                  }
+                ],
+                "title": "Body"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimulationView"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Simulation Command",
+        "tags": [
+          "Simulation"
+        ]
+      }
+    },
+    "/api/v1/me": {
+      "get": {
+        "operationId": "me_api_v1_me_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserView"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Me",
+        "tags": [
+          "Identity"
+        ]
+      }
+    },
+    "/api/v1/system/btcpay/health": {
+      "get": {
+        "operationId": "provider_health_api_v1_system_btcpay_health_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProviderHealth"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Provider Health",
+        "tags": [
+          "System"
+        ]
+      }
+    },
+    "/health": {
+      "get": {
+        "operationId": "health_health_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthView"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Health",
+        "tags": [
+          "System"
+        ]
+      }
+    }
+  }
+}
